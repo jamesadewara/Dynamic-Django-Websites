@@ -1,0 +1,26 @@
+# version: '3.9'
+
+services:
+  app:
+    container_name: webecomercce
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - .:/webecomercce
+    ports:
+      - "8001:8000"  # Production (gunicorn)
+      - "8000:8000"  # Development (runserver)
+    networks:
+      - eco_network
+    command: >
+      sh -c "gunicorn webecomercce.wsgi:application --bind 0.0.0.0:8000"
+
+volumes:
+  ecodb_voldata:
+
+networks:
+  eco_network:
+    driver: bridge
